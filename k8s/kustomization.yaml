@@ -1,0 +1,7 @@
+commonLabels:
+  app: kodespaces
+
+resources:
+  # - namespaces.yaml
+  - frontend.yaml
+  - identity-service.yaml

@@ -1,0 +1,22 @@
+apiVersion: skaffold/v2beta5
+kind: Config
+metadata:
+  name: getting-started-kustomize
+build:
+  artifacts:
+    - image: patnaikshekhar/kodespaces-frontend
+      context: frontend/server
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: patnaikshekhar/kodespaces-identity-service
+      context: identity_manager
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+deploy:
+  kustomize:
+    paths:
+      - k8s

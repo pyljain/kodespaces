@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-service
+  namespace: kodeserver-control-plane
+spec:
+  selector:
+    matchLabels:
+      role: identity-service
+  template:
+    metadata:
+      labels:
+        role: identity-service
+    spec:
+      containers:
+        - name: identity-service
+          image: patnaikshekhar/kodespaces-identity-service
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+          env:
+            - name: OPEN_ID_AUTH_URL
+              valueFrom:
+                secretKeyRef:
+                  name: openid-config
+                  key: auth_url
+            - name: OPEN_ID_TOKEN_URL
+              valueFrom:
+                secretKeyRef:
+                  name: openid-config
+                  key: token_url
+            - name: OPEN_ID_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: openid-config
+                  key: client_id
+            - name: OPEN_ID_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: openid-config
+                  key: client_secret
+            - name: OPEN_ID_REDIRECT_URI
+              valueFrom:
+                secretKeyRef:
+                  name: openid-config
+                  key: redirect_uri
+            - name: OPEN_ID_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: openid-config
+                  key: issuer
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: postgresql-password
+            - name: DOMAIN_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: gd-dns-provider
+                  key: domain
